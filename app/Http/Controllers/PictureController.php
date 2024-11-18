@@ -31,8 +31,9 @@ class PictureController extends Controller
                 $folderPath = env('GOOGLE_DRIVE_FOLDER_ID'); 
                 $fileUrl = Gdrive::put("{$folderPath}/{$fileName}", $file);
 
+
                 $image = new Picture();
-                $image->image_url = $fileUrl;
+                $image->image_url = $fileName;
                 $image->save();
 
                 return response()->json([
