@@ -8,6 +8,6 @@
     @vite(['resources/js/app.js'])
 </head>
 <body>
-    <div id="app"></div> 
+    <div id="app" style='width:100vw'></div> 
 </body>
 </html>
