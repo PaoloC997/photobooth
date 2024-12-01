@@ -14,25 +14,49 @@
 
 <script>
 import axios from 'axios';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 export default {
   data() {
     return {
-      images: [], // Stores the list of image objects fetched from the backend
+      images: [], 
     };
   },
   mounted() {
-    this.fetchImages(); // Fetch images when the component is mounted
+    this.fetchImages(); 
+    this.setupPusher(); 
   },
   methods: {
+    
     async fetchImages() {
       try {
-        const response = await axios.get('/api/images'); // API endpoint to fetch images
-        this.images = response.data.images; // Assign the response images to the local state
+        const response = await axios.get('/api/images'); 
+        this.images = response.data.images; 
       } catch (error) {
-        console.error('Failed to fetch images:', error); // Log any errors
+        console.error('Failed to fetch images:', error); 
       }
     },
+
+   
+    setupPusher() {
+      window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: 'b471ce9eebea71720e2b',
+        cluster: 'eu',
+        forceTLS: true
+      });
+
+      
+      window.Echo.channel('image-channel')
+        .listen('ImageUploaded', (event) => {
+         
+          this.images.push({
+            id: event.image_url, 
+            public_url: event.image_url, 
+          });
+        });
+    }
   },
 };
 </script>
@@ -48,7 +72,7 @@ export default {
 }
 
 .image-container img {
-  width: 20vw; 
+  width: 20vw;
   height: auto;
   border: 1px solid #ccc;
   object-fit: cover;
@@ -57,6 +81,6 @@ export default {
 
 .image-container img:last-child {
   display: block;
-  margin-top: 8px; 
+  margin-top: 8px;
 }
 </style>

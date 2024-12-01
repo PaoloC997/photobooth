@@ -38,7 +38,7 @@ class PictureController extends Controller
                 $image->image_url = $localPath; 
                 $image->save();
 
-                 //  broadcast(new ImageUploaded(asset('storage/' . $localPath))); // Send the local URL to frontend
+                broadcast(new ImageUploaded(asset($localPath))); // Send the local URL to frontend
 
                 /* Step 4: Queue the upload to Google Drive
                 dispatch(function () use ($localPath) {
