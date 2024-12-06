@@ -22,11 +22,10 @@ class RetrieveFileController extends Controller
                 return response()->json(['message' => 'No images found.'], 404);
             }
 
-        
             $images = $pictures->map(function ($picture) {
                 
                 return [
-                    'file_name' => $picture->image_url,
+                    'image_url' => $picture->image_url,
                     'public_url' => asset($picture->image_url),
                 ];
             });

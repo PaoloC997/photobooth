@@ -6,7 +6,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\ShouldBroadcastNow; 
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+
 
 class ImageUploaded implements ShouldBroadcastNow
 {
@@ -25,17 +26,15 @@ class ImageUploaded implements ShouldBroadcastNow
     }
 
     /**
-     * Get the channels the event should broadcast on.
      *
      * @return Channel
      */
     public function broadcastOn()
     {
-        return new Channel('image-channel'); // Example channel
+        return new Channel('image-channel'); 
     }
 
     /**
-     * Get the data to broadcast.
      *
      * @return array
      */
