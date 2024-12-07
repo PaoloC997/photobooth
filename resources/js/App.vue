@@ -43,8 +43,8 @@ export default {
   pointer-events: none;
   z-index: -1;
 }
-    
-    .snow {
+
+.snow {
       position: absolute;
       top: 0;
       left: 0;
@@ -52,20 +52,13 @@ export default {
       height: 100%;
       background-image: radial-gradient(rgb(219, 216, 199), rgb(240, 227, 234));
       background-position: 0% 0%;
+}
      
-    }
-     
-    .snowflake {
+.snowflake {
       position: absolute;
-      
-      
-        
       background-image: url('./assets/pngwing.com.png');
-
       background-size: 100% 100%;
-      animation: fall  linear infinite;
-    
-    
+      animation: fall  linear infinite;  
     }
     
     .App-header {
@@ -84,8 +77,8 @@ export default {
     height: auto;
     margin-bottom: 2rem;
     position:relative;
-   margin-left:auto;
-   margin-right:auto;
+    margin-left:auto;
+    margin-right:auto;
   }
 
   @media (max-width: 768px) {
