@@ -14,13 +14,13 @@ import './echo';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-// Make Pusher available globally
+
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
-    broadcaster: 'pusher', // Set broadcaster to pusher
-    key: import.meta.env.VITE_PUSHER_APP_KEY, // Use Vite environment variable for the app key
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER, // Use Vite environment variable for the cluster
-    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https', // Use https if set
+    broadcaster: 'pusher', 
+    key: import.meta.env.VITE_PUSHER_APP_KEY, 
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https', 
 });
 

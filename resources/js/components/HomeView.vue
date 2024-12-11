@@ -1,19 +1,22 @@
 <template>
-  <div class="pictures">
-    <Swiper
+    <swiper
+      :effect="'Autoplay'"
+      :grabCursor="true"
       :autoplay="{
         delay: 2500,
-        disableOnInteraction: false
+        disableOnInteraction: false,
       }"
-      :grabCursor="true"
+      :loop="enableLoop"
+      :loopAdditionalSlides="2"
+      :slidesPerView="1"
+      :spaceBetween="10"
       :modules="modules"
       class="mySwiper"
     >
-      <Swiper-slide v-for="image in images" :key="image.id">
-        <img :src="image.url" alt="Image" />
-      </Swiper-slide>
-    </Swiper>
-  </div>
+      <swiper-slide class='swiper-element' v-for="image in images" :key="image.id">
+        <img class="film-frame" :src="image.url" alt="Image" />
+      </swiper-slide>
+    </swiper>
 </template>
 
 <script>
@@ -37,8 +40,14 @@ export default {
       images: [],
     };
   },
+  computed: {
+    enableLoop() {
+      setTimeout(()=>{
+        return true
+      }, 1000)
+    },
+  },
   mounted() {
-    this.setupPusher();
     this.fetchImages();
   },
   methods: {
@@ -47,48 +56,71 @@ export default {
         const response = await axios.get('/api/images');
         console.log(response);
         this.images = response.data.images.map((image) => ({
-          id: image.id,
+          id: image.url,
           url: image.image_url,
         }));
-        console.log(this.images);
       } catch (error) {
         console.error('Failed to fetch images:', error);
       }
     },
-    setupPusher() {
-      window.Echo.channel('image-channel').listen('ImageUploaded', (event) => {
-        this.images.push({
-          id: event.image_url,
-          url: event.image_url,
-        });
-      });
-    },
+    
   },
 };
 </script>
-
 <style>
 .swiper {
-  top: 10vh;
-  width: 80%; /* Adjust the width as needed */
-  height: 70vh; /* Ensure the swiper has a reasonable height */
-  overflow: visible; /* Allow overflow so images aren't cut off */
-  position: relative; /* Make sure swiper is positioned correctly */
-  z-index: 1; /* Ensure swiper is in front */
+  width: 25vw;
+  height: 29vh;
+  overflow: visible;
+  position: relative;
+  right: 50vw;
 }
 
 .swiper-slide {
-  display: flex; /* Make the slide a flex container to control content positioning */
-  justify-content: center; /* Center the image inside the slide */
-  align-items: center; /* Vertically center the image */
   width: 100%;
   height: 100%;
-  position: relative; /* Ensure it's positioned correctly */
 }
 
-img {
-  max-width: 100%; /* Ensure the image is responsive */
-  height: auto; /* Maintain aspect ratio */
-  object-fit: cover; /* Cover the container while maintaining aspect ratio */
+.swiper-element img {
+  width: 100%;
+  height: auto;
+  margin-left: 2rem;
+  border: 8px solid black; 
+  border-radius: 10px; 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); 
+  object-fit: cover; 
+  position: relative;
 }
+
+.swiper-element:nth-child(odd) {
+  transform: rotate(-3deg);
+  margin-top: 20px; 
+}
+
+.swiper-element:nth-child(even) {
+  transform: rotate(3deg);
+  margin-top: 10px; 
+}
+
+.swiper-element img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.2) 30%, transparent 70%);
+  border-radius: 10px;
+  pointer-events: none; 
+}
+
+@media (max-width: 480px) {
+  .swiper {
+    width: 100vw;
+    height: 50vh;
+    overflow: visible;
+    left: 5vw;
+  }
+}
+
 </style>
