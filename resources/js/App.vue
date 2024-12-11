@@ -1,101 +1,120 @@
 <template>
   <div>
-    <h1>Image Gallery</h1>
-    <div v-if="images.length === 0">
-      <p>No images to display</p>
-    </div>
-    <div v-else class="gallery">
-      <div v-for="image in images" :key="image.id" class="image-container">
-        <img :src="'data:' + image.mime_type + ';base64,' + image.content" alt="Uploaded Image" />
-      
-      </div>
-    </div>
+    <router-view />
   </div>
 </template>
 
-<script>
-import axios from 'axios';
 
-export default {
-  data() {
-    return {
-      images: [], // Array to store images
-    };
-  },
-  mounted() {
-    // Fetch the images when the component is mounted
-    this.fetchExistingImages();
-  },
-  methods: {
-    // Fetch images from the backend
-    async fetchExistingImages() {
-      try {
-        const response = await axios.get('/api/images'); // Make a GET request to the images API
-        this.images = response.data.images; // Store the fetched images in the images array
-        console.log(response.data.images); 
-        // Convert image URLs to base64 in the frontend
-        this.convertImagesToBase64();
-      } catch (error) {
-        console.error('Failed to fetch images:', error); // Log any error encountered during fetch
+
+<style >
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.snow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+}
+    
+    .snow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(rgb(255, 255, 255), rgb(245, 209, 217));
+      background-position: 0% 0%;
+     
+    }
+     
+    .snowflake {
+      position: absolute;
+      
+      
+        
+      background-image: url('./assets/pngwing.com.png');
+
+      background-size: 100% 100%;
+      animation: fall  linear infinite;
+    
+    
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0) ;
+        opacity: 0 ;
       }
-    },
-    async convertImagesToBase64() {
-      for (let image of this.images) {
-        // Create a new Image object
-        const img = new Image();
-        img.src = image.image_url;
-
-        // Wait for the image to load
-        await new Promise((resolve) => {
-          img.onload = resolve;
-        });
-
-        // Convert image to base64
-        const base64 = await this.convertToBase64(img);
-
-        // Store the base64 string in the image object
-        image.base64 = base64;
+     
+      100% {
+        transform: translateY(-100vh) rotate(60deg) ;
+        opacity: 1;
       }
-    },
-    convertToBase64(img) {
-      return new Promise((resolve) => {
-        // Create a canvas element to draw the image
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
+    }
+    
+  
 
-        // Convert the canvas content to base64
-        const base64 = canvas.toDataURL(img.src);
-        resolve(base64.split(',')[1]); // Remove the prefix (`data:image/*;base64,`)
-      });
-    },
-  },
-};
-</script>
 
-<style scoped>
-.gallery {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  margin:auto;
-  width:80vw;
-  flex-wrap: wrap;
+  .logo {
+    width: 18vw;
+    height: auto;
+    
+    animation-name: beat;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    
+  }
+  
+  @keyframes beat {
+    0% {
+      transform: scale(1);
+    }
+    8% {
+      transform: scale(1.1);
+    }
+    13% {
+      transform: scale(1);
+    }
+    18% {
+      transform: scale(1.1);
+    }
+    23% {
+      transform: scale(1);
+    }
+    
+    }
+
+  
+
+
+/* Media query para móviles en posición de pie */
+@media (max-width: 480px) {
+  .boton {
+    font-size: 20px;
+    padding: 5px 10px;
+  }
+
+
+  .section1 {
+    margin-top: 20vh;
+    height: 3vh;
+  }
+
+  .section2 {
+    display: none;
+  }
+  .logo {
+    width: 50vw;
+    height: auto;
+    top: 20vh;
+    position: relative;
+  }
 }
 
-.image-container img {
-  width: 20vw; /* Adjust size as needed */
-  height: auto;
-  border: 1px solid #ccc;
-  object-fit: cover;
-}
-
-
-
-.image-container img:last-child {
-  display: block;
-  margin-top: 8px; /* Space between images */
-}
 </style>
